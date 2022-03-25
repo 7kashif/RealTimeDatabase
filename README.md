@@ -9,7 +9,7 @@
     <h4>In case does not work</h4>
     <ul>
         <li>Debug the app.</li>
-        <li>Click the link provided in app.</li>
+        <li>Click the link you see in debug (It will lead you to firebase consol).</li>
         <li>Go to project settings in firebase.</li>
         <li>Download google-service.json file.</li>
         <li>Replace it with the one you currently have in your project.</li>
