@@ -1,6 +1,8 @@
 package com.kashif.realtimedatabase
 
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -37,12 +39,26 @@ class MainActivity : AppCompatActivity() {
                     itemTitle = etTitle.text.toString(),
                     itemBody = etBody.text.toString()
                 )
-                viewModel.addItemToDatabase(item)
+                viewModel.addNoteItemToDatabase(item)
+                hideKeyboard(it)
                 etTitle.text.clear()
                 etBody.text.clear()
             }
             rvNotes.adapter = notesAdapter
         }
+        notesAdapter.onDeleteClickListener {
+            viewModel.deleteNoteItem(it)
+        }
+        notesAdapter.onLongClickListener {
+            viewModel.updateNoteItem(it)
+        }
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            this.getSystemService(INPUT_METHOD_SERVICE)
+                    as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
     }
 
 }
