@@ -10,8 +10,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class DatabaseViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
@@ -106,6 +109,18 @@ class DatabaseViewModel : ViewModel() {
             } catch (e: Exception) {
                 _status.postValue("Unexpected error occurred.")
                 Log.e(VIEW_MODEL_TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun addNoteToFireStore(item: NoteItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                Firebase.firestore.collection("notes")
+                    .add(item)
+                    .await()
+            } catch (e: Exception) {
+                Log.e("viewModel","${e.message}")
             }
         }
     }

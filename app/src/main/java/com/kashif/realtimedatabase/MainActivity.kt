@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kashif.realtimedatabase.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -17,16 +18,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         viewModel.getNoteItemsFromDatabase()
+
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+
         setContentView(binding.root)
         setUpViews()
         setUpObservers()
     }
 
     private fun setUpObservers() {
-        viewModel.status.observe(this){
-            Toast.makeText(this,it,Toast.LENGTH_LONG).show()
+        viewModel.status.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
-        viewModel.notesList.observe(this){
+        viewModel.notesList.observe(this) {
             notesAdapter.submitList(it)
         }
     }
@@ -39,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     itemTitle = etTitle.text.toString(),
                     itemBody = etBody.text.toString()
                 )
-                viewModel.addNoteItemToDatabase(item)
+                viewModel.addNoteToFireStore(item)
                 hideKeyboard(it)
                 etTitle.text.clear()
                 etBody.text.clear()
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         val inputMethodManager =
             this.getSystemService(INPUT_METHOD_SERVICE)
                     as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 }

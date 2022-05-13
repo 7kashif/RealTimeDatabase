@@ -4,4 +4,5 @@
     <string name="add_body">Note body</string>
     <string name="add_note">Add Note</string>
     <string name="added_notes">Added Notes</string>
+    <string name="channel_id">notificationChannelId</string>
 </resources>
